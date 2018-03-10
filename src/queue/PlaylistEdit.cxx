@@ -112,7 +112,8 @@ playlist::AppendSong(PlayerControl &pc, DetachedSong &&song)
 		else
 			start = current + 1;
 		if (start < queue.GetLength())
-			queue.ShuffleOrderLastWithPriority(start, queue.GetLength());
+			queue.ShuffleOrderLastWithPriority(start, queue.GetLength(),
+							   pc.seed);
 	}
 
 	UpdateQueuedSong(pc, queued_song);
@@ -190,7 +191,7 @@ playlist::SetPriorityRange(PlayerControl &pc,
 
 	/* apply the priority changes */
 
-	queue.SetPriorityRange(start, end, priority, current);
+	queue.SetPriorityRange(start, end, priority, current, pc.seed);
 
 	/* restore "current" and choose a new "queued" */
 
@@ -416,7 +417,7 @@ playlist::Shuffle(PlayerControl &pc, unsigned start, unsigned end)
 		current = -1;
 	}
 
-	queue.ShuffleRange(start, end);
+	queue.ShuffleRange(start, end, pc.seed);
 
 	UpdateQueuedSong(pc, queued_song);
 	OnModified();

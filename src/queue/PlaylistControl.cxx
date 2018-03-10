@@ -48,7 +48,7 @@ playlist::Stop(PlayerControl &pc)
 
 		unsigned current_position = queue.OrderToPosition(current);
 
-		queue.ShuffleOrder();
+		queue.ShuffleOrder(pc.seed);
 
 		/* make sure that "current" stays valid, and the next
 		   "play" command plays the same song again */
@@ -168,7 +168,7 @@ playlist::PlayNext(PlayerControl &pc)
 			   songs in a different than before */
 			assert(queue.repeat);
 
-			queue.ShuffleOrder();
+			queue.ShuffleOrder(pc.seed);
 
 			/* note that current and queued are
 			   now invalid, but PlayOrder() will

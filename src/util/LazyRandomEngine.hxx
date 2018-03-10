@@ -31,11 +31,12 @@
  */
 class LazyRandomEngine {
 	std::mt19937 *engine;
+	long curr_seed;
 
 public:
 	typedef std::mt19937::result_type result_type;
 
-	LazyRandomEngine():engine(nullptr) {}
+	LazyRandomEngine():engine(nullptr),curr_seed(0) {}
 	~LazyRandomEngine() {
 		delete engine;
 	}
@@ -47,7 +48,7 @@ public:
 	 * Create and seed the real engine.  Call this before any
 	 * other method.
 	 */
-	void AutoCreate();
+	void AutoCreate(long seed);
 
 	static constexpr result_type min() {
 		return std::mt19937::min();

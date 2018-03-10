@@ -144,7 +144,7 @@ playlist::UpdateQueuedSong(PlayerControl &pc, const DetachedSong *prev)
 		const unsigned current_position =
 			queue.OrderToPosition(current);
 
-		queue.ShuffleOrder();
+		queue.ShuffleOrder(pc.seed);
 
 		/* make sure that the current still points to
 		   the current song, after the song order has been
@@ -322,7 +322,7 @@ playlist::SetRandom(PlayerControl &pc, bool status)
 			? GetCurrentPosition()
 			: -1;
 
-		queue.ShuffleOrder();
+		queue.ShuffleOrder(pc.seed);
 
 		if (current_position >= 0) {
 			/* make sure the current song is the first in

@@ -340,22 +340,22 @@ struct Queue {
 	 * Shuffle the order of items in the specified range, ignoring
 	 * their priorities.
 	 */
-	void ShuffleOrderRange(unsigned start, unsigned end) noexcept;
+	void ShuffleOrderRange(unsigned start, unsigned end, long seed) noexcept;
 
 	/**
 	 * Shuffle the order of items in the specified range, taking their
 	 * priorities into account.
 	 */
 	void ShuffleOrderRangeWithPriority(unsigned start,
-					   unsigned end) noexcept;
+					   unsigned end, long seed) noexcept;
 
 	/**
 	 * Shuffles the virtual order of songs, but does not move them
 	 * physically.  This is used in random mode.
 	 */
-	void ShuffleOrder() noexcept;
+	void ShuffleOrder(long seed) noexcept;
 
-	void ShuffleOrderFirst(unsigned start, unsigned end) noexcept;
+	void ShuffleOrderFirst(unsigned start, unsigned end, long seed) noexcept;
 
 	/**
 	 * Shuffles the virtual order of the last song in the
@@ -363,19 +363,21 @@ struct Queue {
 	 * priority are considered.  This is used in random mode after
 	 * a song has been appended by Append().
 	 */
-	void ShuffleOrderLastWithPriority(unsigned start, unsigned end) noexcept;
+	void ShuffleOrderLastWithPriority(unsigned start, unsigned end, 
+					  long seed) noexcept;
 
 	/**
 	 * Shuffles a (position) range in the queue.  The songs are physically
 	 * shuffled, not by using the "order" mapping.
 	 */
-	void ShuffleRange(unsigned start, unsigned end) noexcept;
+	void ShuffleRange(unsigned start, unsigned end, long seed) noexcept;
 
 	bool SetPriority(unsigned position, uint8_t priority, int after_order,
+                         long seed,
 			 bool reorder=true) noexcept;
 
 	bool SetPriorityRange(unsigned start_position, unsigned end_position,
-			      uint8_t priority, int after_order) noexcept;
+			      uint8_t priority, int after_order, long seed) noexcept;
 
 private:
 	void MoveItemTo(unsigned from, unsigned to) noexcept {

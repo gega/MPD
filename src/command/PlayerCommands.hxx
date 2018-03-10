@@ -66,6 +66,9 @@ CommandResult
 handle_clearerror(Client &client, Request request, Response &response);
 
 CommandResult
+handle_seed(Client &client, Request request, Response &response);
+
+CommandResult
 handle_seek(Client &client, Request request, Response &response);
 
 CommandResult

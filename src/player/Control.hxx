@@ -121,6 +121,8 @@ struct PlayerControl final : AudioOutputClient {
 	 */
 	const AudioFormat configured_audio_format;
 
+	long seed;
+
 	/**
 	 * The handle of the player thread.
 	 */

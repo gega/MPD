@@ -295,13 +295,13 @@ queue_sort_order_by_priority(Queue *queue,
 }
 
 void
-Queue::ShuffleOrderRange(unsigned start, unsigned end) noexcept
+Queue::ShuffleOrderRange(unsigned start, unsigned end, long seed) noexcept
 {
 	assert(random);
 	assert(start <= end);
 	assert(end <= length);
 
-	rand.AutoCreate();
+	rand.AutoCreate(seed);
 	std::shuffle(order + start, order + end, rand);
 }
 
@@ -310,7 +310,7 @@ Queue::ShuffleOrderRange(unsigned start, unsigned end) noexcept
  * priority group.
  */
 void
-Queue::ShuffleOrderRangeWithPriority(unsigned start, unsigned end) noexcept
+Queue::ShuffleOrderRangeWithPriority(unsigned start, unsigned end, long seed) noexcept
 {
 	assert(random);
 	assert(start <= end);
@@ -333,33 +333,33 @@ Queue::ShuffleOrderRangeWithPriority(unsigned start, unsigned end) noexcept
 		if (priority != group_priority) {
 			/* start of a new group - shuffle the one that
 			   has just ended */
-			ShuffleOrderRange(group_start, i);
+			ShuffleOrderRange(group_start, i, seed);
 			group_start = i;
 			group_priority = priority;
 		}
 	}
 
 	/* shuffle the last group */
-	ShuffleOrderRange(group_start, end);
+	ShuffleOrderRange(group_start, end, seed);
 }
 
 void
-Queue::ShuffleOrder() noexcept
+Queue::ShuffleOrder(long seed) noexcept
 {
-	ShuffleOrderRangeWithPriority(0, length);
+	ShuffleOrderRangeWithPriority(0, length, seed);
 }
 
 void
-Queue::ShuffleOrderFirst(unsigned start, unsigned end) noexcept
+Queue::ShuffleOrderFirst(unsigned start, unsigned end, long seed) noexcept
 {
-	rand.AutoCreate();
+	rand.AutoCreate(seed);
 
 	std::uniform_int_distribution<unsigned> distribution(start, end - 1);
 	SwapOrders(start, distribution(rand));
 }
 
 void
-Queue::ShuffleOrderLastWithPriority(unsigned start, unsigned end) noexcept
+Queue::ShuffleOrderLastWithPriority(unsigned start, unsigned end, long seed) noexcept
 {
 	assert(end <= length);
 	assert(start < end);
@@ -373,19 +373,19 @@ Queue::ShuffleOrderLastWithPriority(unsigned start, unsigned end) noexcept
 		assert(start < end);
 	}
 
-	rand.AutoCreate();
+	rand.AutoCreate(seed);
 
 	std::uniform_int_distribution<unsigned> distribution(start, end - 1);
 	SwapOrders(end - 1, distribution(rand));
 }
 
 void
-Queue::ShuffleRange(unsigned start, unsigned end) noexcept
+Queue::ShuffleRange(unsigned start, unsigned end, long seed) noexcept
 {
 	assert(start <= end);
 	assert(end <= length);
 
-	rand.AutoCreate();
+	rand.AutoCreate(seed);
 
 	for (unsigned i = start; i < end; i++) {
 		std::uniform_int_distribution<unsigned> distribution(start,
@@ -430,7 +430,7 @@ Queue::CountSamePriority(unsigned start_order, uint8_t priority) const noexcept
 
 bool
 Queue::SetPriority(unsigned position, uint8_t priority, int after_order,
-		   bool reorder) noexcept
+		   long seed, bool reorder) noexcept
 {
 	assert(position < length);
 
@@ -483,14 +483,15 @@ Queue::SetPriority(unsigned position, uint8_t priority, int after_order,
 
 	const unsigned priority_count = CountSamePriority(new_order, priority);
 	assert(priority_count >= 1);
-	ShuffleOrderFirst(new_order, new_order + priority_count);
+	ShuffleOrderFirst(new_order, new_order + priority_count, seed);
 
 	return true;
 }
 
 bool
 Queue::SetPriorityRange(unsigned start_position, unsigned end_position,
-			uint8_t priority, int after_order) noexcept
+			uint8_t priority, int after_order,
+			long seed) noexcept
 {
 	assert(start_position <= end_position);
 	assert(end_position <= length);
@@ -504,7 +505,7 @@ Queue::SetPriorityRange(unsigned start_position, unsigned end_position,
 			? (int)PositionToOrder(after_position)
 			: -1;
 
-		modified |= SetPriority(i, priority, after_order);
+		modified |= SetPriority(i, priority, after_order, seed);
 	}
 
 	return modified;

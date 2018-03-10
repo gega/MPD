@@ -21,11 +21,17 @@
 #include "LazyRandomEngine.hxx"
 
 void
-LazyRandomEngine::AutoCreate()
+LazyRandomEngine::AutoCreate( long seed )
 {
+	if(seed != 0 && seed != curr_seed)
+	{
+    		delete engine;
+		engine = nullptr;
+		curr_seed = seed;
+	}
 	if (engine != nullptr)
 		return;
 
 	std::random_device rd;
-	engine = new std::mt19937(rd());
+	engine = new std::mt19937(seed==0?rd():seed);
 }

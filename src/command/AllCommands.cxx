@@ -177,6 +177,7 @@ static constexpr struct command commands[] = {
 	{ "searchadd", PERMISSION_ADD, 2, -1, handle_searchadd },
 	{ "searchaddpl", PERMISSION_CONTROL, 3, -1, handle_searchaddpl },
 #endif
+	{ "seed", PERMISSION_CONTROL, 0, 1, handle_seed },
 	{ "seek", PERMISSION_CONTROL, 2, 2, handle_seek },
 	{ "seekcur", PERMISSION_CONTROL, 1, 1, handle_seekcur },
 	{ "seekid", PERMISSION_CONTROL, 2, 2, handle_seekid },

@@ -281,6 +281,20 @@ handle_clearerror(Client &client, gcc_unused Request args,
 }
 
 CommandResult
+handle_seed(Client &client, Request args, gcc_unused Response &r)
+{
+	auto &pc = client.GetPlayerControl();
+
+	if (!args.empty()) {
+		unsigned seed = args.ParseUnsigned(0);
+		pc.seed = seed;
+	} else
+		r.Format("Seed: %d\n", pc.seed);
+
+	return CommandResult::OK;
+}
+
+CommandResult
 handle_seek(Client &client, Request args, gcc_unused Response &r)
 {
 	unsigned song = args.ParseUnsigned(0);
